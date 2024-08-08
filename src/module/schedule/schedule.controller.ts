@@ -21,10 +21,7 @@ export class ScheduleController {
 
     @Post()
     async create(@Body() body: Prisma.ScheduleCreateInput) {
-        return {
-            statusCode: HttpStatus.OK,
-            data: await this.scheduleService.create(body)
-        }
+        return await this.scheduleService.create(body);
     }
 
     @Put(':id')

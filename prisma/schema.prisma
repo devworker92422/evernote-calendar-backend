@@ -29,6 +29,28 @@ model Schedule{
 
 model User {
   id Int @default(autoincrement()) @id
+  email String
+  password String
+  createAt DateTime @default(now())
+  updateAt DateTime @default(now()) @updatedAt 
+}
+
+model Note{
+  id Int @default(autoincrement()) @id
+  title String @db.Text
+  content String @db.LongText
+  // owner 
+  createAt DateTime @default(now())
+  updateAt DateTime @default(now()) @updatedAt 
+}
+
+model TodoList {
+  id Int @default(autoincrement()) @id
+  title String
+  description String @db.LongText
+  dueDate DateTime
+  complete Boolean
+  // owner 
   createAt DateTime @default(now())
   updateAt DateTime @default(now()) @updatedAt 
 }
