@@ -21,6 +21,7 @@ model Schedule{
   width Int
   startDate String
   endDate String
+  type String
   //  1-n relation with User
   createAt DateTime @default(now())
   updateAt DateTime @default(now()) @updatedAt 
