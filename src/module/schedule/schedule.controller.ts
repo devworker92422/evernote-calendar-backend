@@ -6,6 +6,7 @@ import {
     Delete,
     Param,
     Body,
+    Query,
     HttpStatus
 } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
@@ -32,12 +33,14 @@ export class ScheduleController {
         }
     }
 
+    @Get('day')
+    async findByDay(@Query('day') day: string) {
+        return await this.scheduleService.findByDay(day);
+    }
+
     @Get()
     async findAll() {
-        return {
-            statusCode: HttpStatus.OK,
-            data: await this.scheduleService.findAll()
-        }
+        return await this.scheduleService.findAll();
     }
 
     @Delete(':id')

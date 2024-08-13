@@ -31,4 +31,14 @@ export class ScheduleService {
     findAll(): Promise<Schedule[]> {
         return this.prisma.schedule.findMany();
     }
+
+    findByDay(day: string): Promise<Schedule[]> {
+        return this.prisma.schedule.findMany({
+            where: {
+                startDate: {
+                    gte: day
+                }
+            }
+        })
+    }
 }
