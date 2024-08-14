@@ -41,6 +41,7 @@ model Note{
   title String @db.Text
   content String @db.LongText
   // owner 
+  date String
   createAt DateTime @default(now())
   updateAt DateTime @default(now()) @updatedAt 
 }
