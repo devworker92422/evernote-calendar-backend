@@ -6,6 +6,7 @@ import {
     Delete,
     Param,
     Body,
+    Query,
     HttpStatus
 } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
@@ -31,6 +32,11 @@ export class NoteController {
     @Get()
     async findAll() {
         return await this.noteService.findAll();
+    }
+
+    @Get('/day')
+    async findAllByDay(@Query('day') day: string) {
+        return await this.noteService.findAllByDay(day);
     }
 
     @Delete(':id')

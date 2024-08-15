@@ -29,7 +29,11 @@ export class ScheduleService {
     }
 
     findAll(): Promise<Schedule[]> {
-        return this.prisma.schedule.findMany();
+        return this.prisma.schedule.findMany({
+            orderBy: {
+                startDate: 'asc'
+            }
+        });
     }
 
     findByDay(day: string): Promise<Schedule[]> {
@@ -38,6 +42,9 @@ export class ScheduleService {
                 startDate: {
                     gte: day
                 }
+            },
+            orderBy: {
+                startDate: 'asc'
             }
         })
     }

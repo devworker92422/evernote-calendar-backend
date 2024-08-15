@@ -21,7 +21,22 @@ export class NoteService {
     }
 
     findAll(): Promise<Note[]> {
-        return this.prisma.note.findMany();
+        return this.prisma.note.findMany({
+            orderBy: {
+                date: 'asc'
+            }
+        });
+    }
+
+    findAllByDay(date: string): Promise<Note[]> {
+        return this.prisma.note.findMany({
+            where: {
+                date
+            },
+            orderBy: {
+                date: 'asc'
+            }
+        })
     }
 
     remove(id: number): Promise<Note> {
