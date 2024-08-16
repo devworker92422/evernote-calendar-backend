@@ -12,7 +12,7 @@ import { Prisma } from "@prisma/client";
 import { TodoListService } from "./todolist.service";
 
 
-@Controller('todolist')
+@Controller('task')
 
 
 export class TodoListController {
