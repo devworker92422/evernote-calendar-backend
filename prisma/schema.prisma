@@ -50,7 +50,7 @@ model TodoList {
   id Int @default(autoincrement()) @id
   title String
   description String @db.LongText
-  dueDate DateTime
+  dueDate String
   startTime String
   endTime String
   complete Boolean @default(false)
