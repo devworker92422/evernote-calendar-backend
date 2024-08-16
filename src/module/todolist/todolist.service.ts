@@ -21,7 +21,11 @@ export class TodoListService {
     }
 
     findAll(): Promise<TodoList[]> {
-        return this.prisma.todoList.findMany();
+        return this.prisma.todoList.findMany({
+            orderBy: {
+                dueDate: 'asc',
+            }
+        })
     }
 
     remove(id: number): Promise<TodoList> {

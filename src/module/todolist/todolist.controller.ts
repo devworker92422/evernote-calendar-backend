@@ -8,7 +8,7 @@ import {
     Param,
     HttpStatus
 } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import { Prisma, TodoList } from "@prisma/client";
 import { TodoListService } from "./todolist.service";
 
 
@@ -27,7 +27,28 @@ export class TodoListController {
 
     @Get()
     async findAll() {
-        return await this.todolistService.findAll();
+        const todolist = await this.todolistService.findAll();
+        let result: Array<{ date: string, todolist: TodoList[] }> = [];
+        let activeDate = todolist[0].dueDate;
+        let tmpList: TodoList[] = [];
+        for (let task of todolist) {
+            if (task.dueDate == activeDate) {
+                tmpList.push(task);
+            } else {
+                result.push({
+                    date: activeDate,
+                    todolist: tmpList
+                });
+                tmpList = [];
+                tmpList.push(task);
+                activeDate = task.dueDate;
+            }
+        }
+        result.push({
+            date: activeDate,
+            todolist: tmpList
+        });
+        return result;
     }
 
     @Put(':id')
