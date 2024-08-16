@@ -53,7 +53,7 @@ model TodoList {
   dueDate DateTime
   startTime String
   endTime String
-  complete Boolean
+  complete Boolean @default(false)
   // owner 
   createAt DateTime @default(now())
   updateAt DateTime @default(now()) @updatedAt 
