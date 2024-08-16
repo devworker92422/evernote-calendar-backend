@@ -51,6 +51,8 @@ model TodoList {
   title String
   description String @db.LongText
   dueDate DateTime
+  startTime String
+  endTime String
   complete Boolean
   // owner 
   createAt DateTime @default(now())
