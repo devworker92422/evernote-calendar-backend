@@ -30,7 +30,10 @@ model Schedule{
 
 model User {
   id Int @default(autoincrement()) @id
+  firstNaem String
+  lastName String
   email String
+  emailVerify Boolean
   password String
   createAt DateTime @default(now())
   updateAt DateTime @default(now()) @updatedAt 
