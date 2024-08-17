@@ -35,7 +35,7 @@ model User {
   email String 
   emailVerify Boolean @default(false)
   password String
-  // role Role @default(USER)
+  role Role @default(USER)
   createAt DateTime @default(now())
   updateAt DateTime @default(now()) @updatedAt 
 }
@@ -71,7 +71,7 @@ model TodoList {
 //   udpateAt DateTime @default(now()) @updatedAt 
 // }
 
-// enum Role {
-//   USER
-//   ADMIN
-// }
+enum Role {
+  USER
+  ADMIN
+}
