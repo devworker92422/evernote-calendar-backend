@@ -28,6 +28,17 @@ export class TodoListService {
         })
     }
 
+    findAllByDay(day: string): Promise<TodoList[]> {
+        return this.prisma.todoList.findMany({
+            where: {
+                dueDate: day
+            },
+            orderBy: {
+                startTime: 'asc'
+            }
+        })
+    }
+
     remove(id: number): Promise<TodoList> {
         return this.prisma.todoList.delete({
             where: { id }

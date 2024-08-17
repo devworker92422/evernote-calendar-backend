@@ -6,7 +6,7 @@ import {
     Delete,
     Body,
     Param,
-    HttpStatus
+    Query,
 } from "@nestjs/common";
 import { Prisma, TodoList } from "@prisma/client";
 import { TodoListService } from "./todolist.service";
@@ -49,6 +49,11 @@ export class TodoListController {
             todolist: tmpList
         });
         return result;
+    }
+
+    @Get('day')
+    async findAllByDay(@Query('day') day: string) {
+        return await this.todolistService.findAllByDay(day);
     }
 
     @Put(':id')
