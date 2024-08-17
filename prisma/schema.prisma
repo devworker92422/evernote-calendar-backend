@@ -61,3 +61,11 @@ model TodoList {
   createAt DateTime @default(now())
   updateAt DateTime @default(now()) @updatedAt 
 }
+
+model WorkSpace{
+  id Int @default(autoincrement()) @id
+  title String
+  description String @db.LongText
+  createAt DateTime @default(now())
+  udpateAt DateTime @default(now()) @updatedAt 
+}
