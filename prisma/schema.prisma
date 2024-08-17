@@ -30,7 +30,7 @@ model Schedule{
 
 model User {
   id Int @default(autoincrement()) @id
-  firstNaem String
+  firstName String
   lastName String
   email String 
   emailVerify Boolean @default(false)
