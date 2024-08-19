@@ -7,7 +7,8 @@ import {
     Param,
     Body,
     Query,
-    UseGuards
+    UseGuards,
+    Req
 } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
 import { NoteService } from "./note.service";
@@ -22,8 +23,8 @@ export class NoteController {
     ) { }
 
     @Post()
-    async create(@Body() body: Prisma.NoteCreateInput) {
-        return await this.noteService.create(body);
+    async create(@Body() body: Prisma.NoteCreateInput, @Req() req: any) {
+        return await this.noteService.create(body, req.user.id);
     }
 
     @Put(':id')
@@ -32,13 +33,13 @@ export class NoteController {
     }
 
     @Get()
-    async findAll() {
-        return await this.noteService.findAll();
+    async findAll(@Req() req: any) {
+        return await this.noteService.findAll(req.user.id);
     }
 
     @Get('/day')
-    async findAllByDay(@Query('day') day: string) {
-        return await this.noteService.findAllByDay(day);
+    async findAllByDay(@Query('day') day: string, @Req() req: any) {
+        return await this.noteService.findAllByDay(day, req.user.id);
     }
 
     @Delete(':id')

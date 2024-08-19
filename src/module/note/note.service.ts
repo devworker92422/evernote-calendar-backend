@@ -9,8 +9,17 @@ export class NoteService {
         private prisma: PrismaService
     ) { }
 
-    create(data: Prisma.NoteCreateInput): Promise<Note> {
-        return this.prisma.note.create({ data });
+    create(data: Prisma.NoteCreateInput, id: number): Promise<Note> {
+        return this.prisma.note.create({
+            data: {
+                ...data,
+                owner: {
+                    connect: {
+                        id
+                    }
+                }
+            }
+        });
     }
 
     update(update: Prisma.NoteUpdateInput, id: number): Promise<Note> {
@@ -20,7 +29,7 @@ export class NoteService {
         });
     }
 
-    findAll(): Promise<Note[]> {
+    findAll(ownerId): Promise<Note[]> {
         return this.prisma.note.findMany({
             orderBy: {
                 date: 'asc'
@@ -28,7 +37,7 @@ export class NoteService {
         });
     }
 
-    findAllByDay(date: string): Promise<Note[]> {
+    findAllByDay(date: string, ownerId): Promise<Note[]> {
         return this.prisma.note.findMany({
             where: {
                 date
