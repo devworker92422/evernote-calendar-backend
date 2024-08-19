@@ -54,8 +54,10 @@ model Schedule{
   type String
   createAt DateTime @default(now())
   updateAt DateTime @default(now()) @updatedAt 
-  owner User @relation(fields: [ownerId],references: [id],onDelete: Cascade,onUpdate: Cascade)
-  ownerId Int
+  owner User? @relation(fields: [ownerId],references: [id],onDelete: Cascade,onUpdate: Cascade)
+  ownerId Int?
+  workspace WorkSpace ? @relation(fields: [workspaceId],references: [id])
+  workspaceId Int?
 }
 
 model TodoList {
@@ -68,8 +70,10 @@ model TodoList {
   complete Boolean @default(false)
   createAt DateTime @default(now())
   updateAt DateTime @default(now()) @updatedAt
-  owner User @relation(fields: [ownerId],references: [id],onDelete: Cascade,onUpdate: Cascade)
-  ownerId Int
+  owner User? @relation(fields: [ownerId],references: [id],onDelete: Cascade,onUpdate: Cascade)
+  ownerId Int?
+  workspace WorkSpace ? @relation(fields: [workspaceId],references: [id])
+  workspaceId Int?
 }
 
 model WorkSpace{
@@ -82,6 +86,8 @@ model WorkSpace{
   ownerId Int
   invitedWorkSpace User_WorkSpace[]
   notes Note[]
+  schedules Schedule[]
+  todolists TodoList[]
 }
 
 model User_WorkSpace{
