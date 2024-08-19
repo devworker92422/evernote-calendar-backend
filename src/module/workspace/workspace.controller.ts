@@ -9,10 +9,12 @@ import {
     Req,
     UseGuards
 } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
 import { Prisma } from "@prisma/client";
 import { WorkSpaceService } from "./workspace.service";
 
 @Controller('workspace')
+@UseGuards(AuthGuard('jwt'))
 
 export class WorkSpaceController {
     constructor(
