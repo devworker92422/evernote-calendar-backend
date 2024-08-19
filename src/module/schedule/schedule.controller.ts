@@ -7,8 +7,11 @@ import {
     Param,
     Body,
     Query,
-    HttpStatus
+    HttpStatus,
+    UseGuards,
+    Req
 } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
 import { Prisma } from "@prisma/client";
 import { ScheduleService } from "./schedule.service";
 
@@ -20,11 +23,13 @@ export class ScheduleController {
         private scheduleService: ScheduleService
     ) { }
 
+    @UseGuards(AuthGuard('jwt'))
     @Post()
-    async create(@Body() body: Prisma.ScheduleCreateInput) {
-        return await this.scheduleService.create(body);
+    async create(@Body() body: Prisma.ScheduleCreateInput, @Req() req: any) {
+        return await this.scheduleService.create(body, req.user.id);
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Put(':id')
     async update(@Body() body: Prisma.ScheduleUpdateInput, @Param('id') id: string) {
         return {
@@ -33,16 +38,19 @@ export class ScheduleController {
         }
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Get('day')
-    async findByDay(@Query('day') day: string) {
-        return await this.scheduleService.findByDay(day);
+    async findByDay(@Query('day') day: string, @Req() req: any) {
+        return await this.scheduleService.findByDay(day, req.user.id);
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Get()
-    async findAll() {
-        return await this.scheduleService.findAll();
+    async findAll(@Req() req: any) {
+        return await this.scheduleService.findAll(req.user.id);
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Delete(':id')
     async remove(@Param('id') id: string) {
         return {

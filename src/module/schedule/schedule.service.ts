@@ -9,8 +9,17 @@ export class ScheduleService {
         private prisma: PrismaService
     ) { }
 
-    create(data: Prisma.ScheduleCreateInput): Promise<Schedule> {
-        return this.prisma.schedule.create({ data });
+    create(data: Prisma.ScheduleCreateInput, userId: number): Promise<Schedule> {
+        return this.prisma.schedule.create({
+            data: {
+                ...data,
+                owner: {
+                    connect: {
+                        id: userId
+                    }
+                }
+            },
+        });
     }
 
     update(id: number, data: Prisma.ScheduleUpdateInput): Promise<Schedule> {
@@ -28,20 +37,24 @@ export class ScheduleService {
         })
     }
 
-    findAll(): Promise<Schedule[]> {
+    findAll(ownerId: number): Promise<Schedule[]> {
         return this.prisma.schedule.findMany({
+            where: {
+                ownerId
+            },
             orderBy: {
                 startDate: 'asc'
             }
         });
     }
 
-    findByDay(day: string): Promise<Schedule[]> {
+    findByDay(day: string, ownerId: number): Promise<Schedule[]> {
         return this.prisma.schedule.findMany({
             where: {
                 startDate: {
                     gte: day
-                }
+                },
+                ownerId
             },
             orderBy: {
                 startDate: 'asc'
