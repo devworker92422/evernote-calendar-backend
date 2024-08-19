@@ -7,12 +7,14 @@ import {
     Param,
     Body,
     Query,
-    HttpStatus
+    UseGuards
 } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
 import { NoteService } from "./note.service";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller('note')
+@UseGuards(AuthGuard('jwt'))
 
 export class NoteController {
     constructor(

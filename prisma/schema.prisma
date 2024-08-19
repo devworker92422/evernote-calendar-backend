@@ -40,16 +40,18 @@ model User {
   createAt DateTime @default(now())
   updateAt DateTime @default(now()) @updatedAt 
   schedules Schedule[]
+  notes Note[]
 }
 
 model Note{
   id Int @default(autoincrement()) @id
   title String @db.Text
   content String @db.LongText
-  // owner 
   date String
   createAt DateTime @default(now())
-  updateAt DateTime @default(now()) @updatedAt 
+  updateAt DateTime @default(now()) @updatedAt
+  owner User @relation(fields: [ownerId], references: [id])
+  ownerId Int
 }
 
 model TodoList {
