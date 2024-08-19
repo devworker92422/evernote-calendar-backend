@@ -42,6 +42,7 @@ model User {
   schedules Schedule[]
   notes Note[]
   todolists TodoList[]
+  workspaces WorkSpace[]
 }
 
 model Note{
@@ -75,6 +76,8 @@ model WorkSpace{
   description String @db.LongText
   createAt DateTime @default(now())
   udpateAt DateTime @default(now()) @updatedAt 
+  owner User @relation(fields: [ownerId],references: [id])
+  ownerId Int
 }
 
 enum Role {

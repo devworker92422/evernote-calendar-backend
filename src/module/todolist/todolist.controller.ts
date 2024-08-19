@@ -11,7 +11,7 @@ import {
     Req
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { Prisma, TodoList, User } from "@prisma/client";
+import { Prisma, TodoList } from "@prisma/client";
 import { TodoListService } from "./todolist.service";
 
 
