@@ -15,21 +15,19 @@ import { AuthGuard } from "@nestjs/passport";
 import { Prisma } from "@prisma/client";
 import { ScheduleService } from "./schedule.service";
 
-
 @Controller('schedule')
+@UseGuards(AuthGuard('jwt'))
 
 export class ScheduleController {
     constructor(
         private scheduleService: ScheduleService
     ) { }
 
-    @UseGuards(AuthGuard('jwt'))
     @Post()
     async create(@Body() body: Prisma.ScheduleCreateInput, @Req() req: any) {
         return await this.scheduleService.create(body, req.user.id);
     }
 
-    @UseGuards(AuthGuard('jwt'))
     @Put(':id')
     async update(@Body() body: Prisma.ScheduleUpdateInput, @Param('id') id: string) {
         return {
@@ -38,19 +36,16 @@ export class ScheduleController {
         }
     }
 
-    @UseGuards(AuthGuard('jwt'))
     @Get('day')
     async findByDay(@Query('day') day: string, @Req() req: any) {
         return await this.scheduleService.findByDay(day, req.user.id);
     }
 
-    @UseGuards(AuthGuard('jwt'))
     @Get()
     async findAll(@Req() req: any) {
         return await this.scheduleService.findAll(req.user.id);
     }
 
-    @UseGuards(AuthGuard('jwt'))
     @Delete(':id')
     async remove(@Param('id') id: string) {
         return {
