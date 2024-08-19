@@ -22,6 +22,7 @@ model Schedule{
   startDate String
   endDate String
   type String
+
   //  1-n relation with User
   createAt DateTime @default(now())
   updateAt DateTime @default(now()) @updatedAt 
@@ -63,13 +64,13 @@ model TodoList {
   updateAt DateTime @default(now()) @updatedAt 
 }
 
-// model WorkSpace{
-//   id Int @default(autoincrement()) @id
-//   title String
-//   description String @db.LongText
-//   createAt DateTime @default(now())
-//   udpateAt DateTime @default(now()) @updatedAt 
-// }
+model WorkSpace{
+  id Int @default(autoincrement()) @id
+  title String
+  description String @db.LongText
+  createAt DateTime @default(now())
+  udpateAt DateTime @default(now()) @updatedAt 
+}
 
 enum Role {
   USER
