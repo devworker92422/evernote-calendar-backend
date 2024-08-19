@@ -9,9 +9,14 @@ export class TodoListService {
         private prisma: PrismaService
     ) { }
 
-    create(data: Prisma.TodoListCreateInput): Promise<TodoList> {
+    create(data: Prisma.TodoListCreateInput, id: number): Promise<TodoList> {
         return this.prisma.todoList.create({
-            data
+            data: {
+                ...data,
+                owner: {
+                    connect: { id }
+                }
+            }
         });
     }
 
@@ -22,18 +27,22 @@ export class TodoListService {
         });
     }
 
-    findAll(): Promise<TodoList[]> {
+    findAll(ownerId: number): Promise<TodoList[]> {
         return this.prisma.todoList.findMany({
+            where: {
+                ownerId
+            },
             orderBy: {
                 dueDate: 'asc',
             }
         })
     }
 
-    findAllByDay(day: string): Promise<TodoList[]> {
+    findAllByDay(day: string, ownerId: number): Promise<TodoList[]> {
         return this.prisma.todoList.findMany({
             where: {
-                dueDate: day
+                dueDate: day,
+                ownerId
             },
             orderBy: {
                 startTime: 'asc'
