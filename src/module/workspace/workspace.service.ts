@@ -9,7 +9,7 @@ export class WorkSpaceService {
         private prisma: PrismaService
     ) { }
 
-    create(data: Prisma.WorkSpaceCreateInput, id: number): Promise<WorkSpace> {
+    create(data: Prisma.WorkSpaceCreateInput): Promise<WorkSpace> {
         return this.prisma.workSpace.create({
             data
         })
@@ -49,6 +49,19 @@ export class WorkSpaceService {
                     }
                 ]
             },
+            orderBy: {
+                createAt: 'desc'
+            },
+            include: {
+                _count: {
+                    select: {
+                        notes: true,
+                        schedules: true,
+                        todolists: true
+                    }
+                }
+            }
+
         })
     }
 

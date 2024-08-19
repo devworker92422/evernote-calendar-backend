@@ -4,7 +4,7 @@ import * as bycrypt from 'bcryptjs';
 import { JwtService } from "@nestjs/jwt";
 import { PrismaService } from "../prisma/prisma.service";
 import { AUTH_400_ERROR, AUTH_401_ERROR } from "src/const/message";
-import { SignInDTO } from "./auth.dto";
+import { SignInDTO } from "src/dto";
 
 @Injectable()
 

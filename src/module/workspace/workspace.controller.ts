@@ -25,7 +25,7 @@ export class WorkSpaceController {
     @Post()
     async create(@Body() body: Prisma.WorkSpaceCreateInput, @Req() req: any) {
         body.owner = { connect: { id: req.user.id } };
-        return await this.workspaceService.create(body, req.user.id);
+        return await this.workspaceService.create(body);
     }
 
     @Get()

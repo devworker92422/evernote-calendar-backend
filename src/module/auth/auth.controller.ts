@@ -8,7 +8,7 @@ import {
 } from "@nestjs/common";
 import { Prisma, User } from "@prisma/client";
 import { AuthService } from "./auth.service";
-import { SignInDTO } from "./auth.dto";
+import { SignInDTO } from "src/dto";
 
 @Controller('auth')
 
