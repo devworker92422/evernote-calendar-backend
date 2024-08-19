@@ -7,8 +7,11 @@ import {
     Body,
     Param,
     Query,
+    UseGuards,
+    Req
 } from "@nestjs/common";
-import { Prisma, TodoList } from "@prisma/client";
+import { AuthGuard } from "@nestjs/passport";
+import { Prisma, TodoList, User } from "@prisma/client";
 import { TodoListService } from "./todolist.service";
 
 
@@ -20,8 +23,9 @@ export class TodoListController {
         private todolistService: TodoListService
     ) { }
 
+    @UseGuards(AuthGuard('jwt'))
     @Post()
-    async create(@Body() body: Prisma.TodoListCreateInput) {
+    async create(@Body() body: Prisma.TodoListCreateInput, @Req() req: any) {
         return await this.todolistService.create(body);
     }
 

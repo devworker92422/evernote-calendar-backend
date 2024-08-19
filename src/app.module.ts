@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from './module/schedule/schedule.module';
 import { NoteModule } from './module/note/note.module';
 import { TodoListModule } from './module/todolist/todolist.module';
@@ -11,7 +12,8 @@ import { AppService } from './app.service';
     ScheduleModule,
     NoteModule,
     TodoListModule,
-    AuthModule
+    AuthModule,
+    ConfigModule.forRoot()
   ],
   controllers: [AppController],
   providers: [AppService],
