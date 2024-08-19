@@ -10,7 +10,9 @@ export class TodoListService {
     ) { }
 
     create(data: Prisma.TodoListCreateInput): Promise<TodoList> {
-        return this.prisma.todoList.create({ data });
+        return this.prisma.todoList.create({
+            data
+        });
     }
 
     update(update: Prisma.TodoListUpdateInput, id: number) {

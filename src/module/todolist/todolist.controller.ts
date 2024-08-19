@@ -25,12 +25,12 @@ export class TodoListController {
 
     @UseGuards(AuthGuard('jwt'))
     @Post()
-    async create(@Body() body: Prisma.TodoListCreateInput, @Req() req: any) {
+    async create(@Body() body: Prisma.TodoListCreateInput) {
         return await this.todolistService.create(body);
     }
 
     @Get()
-    async findAll() {
+    async findAll(@Req() req: any) {
         const todolist = await this.todolistService.findAll();
         let result: Array<{ date: string, todolist: TodoList[] }> = [];
         let activeDate = todolist[0].dueDate;
