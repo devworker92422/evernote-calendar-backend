@@ -6,6 +6,7 @@ import {
     Delete,
     Body,
     Param,
+    Query,
     Req,
     UseGuards
 } from "@nestjs/common";
@@ -23,6 +24,7 @@ export class WorkSpaceController {
 
     @Post()
     async create(@Body() body: Prisma.WorkSpaceCreateInput, @Req() req: any) {
+        body.owner = { connect: { id: req.user.id } };
         return await this.workspaceService.create(body, req.user.id);
     }
 
@@ -41,4 +43,8 @@ export class WorkSpaceController {
         return await this.workspaceService.remove(parseInt(id));
     }
 
+    @Get('invite')
+    async invite(@Query('userId') userId: string, @Query('workspaceId') workspaceId: string) {
+        return await this.workspaceService.invite(parseInt(workspaceId), parseInt(userId));
+    }
 }

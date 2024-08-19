@@ -11,13 +11,9 @@ export class WorkSpaceService {
 
     create(data: Prisma.WorkSpaceCreateInput, id: number): Promise<WorkSpace> {
         return this.prisma.workSpace.create({
-            data: {
-                ...data,
-                owner: {
-                    connect: { id }
-                }
-            }
+            data
         })
+
     }
 
     update(data: Prisma.WorkSpaceUpdateInput, id: number): Promise<WorkSpace> {
@@ -40,7 +36,37 @@ export class WorkSpaceService {
     findAll(ownerId: number): Promise<WorkSpace[]> {
         return this.prisma.workSpace.findMany({
             where: {
-                ownerId
+                OR: [
+                    {
+                        ownerId
+                    },
+                    {
+                        invitedWorkSpace: {
+                            every: {
+                                userId: ownerId
+                            }
+                        }
+                    }
+                ]
+            },
+        })
+    }
+
+    invite(workspaceId: number, userId: number): Promise<WorkSpace> {
+        return this.prisma.workSpace.update({
+            data: {
+                invitedWorkSpace: {
+                    create: {
+                        user: {
+                            connect: {
+                                id: userId
+                            }
+                        }
+                    }
+                }
+            },
+            where: {
+                id: workspaceId
             }
         })
     }

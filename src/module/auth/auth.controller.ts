@@ -26,5 +26,4 @@ export class AuthController {
     async signInWithEmail(@Body() body: SignInDTO) {
         return await this.authService.signInWithEmail(body);
     }
-
 }

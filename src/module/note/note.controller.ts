@@ -24,7 +24,9 @@ export class NoteController {
 
     @Post()
     async create(@Body() body: Prisma.NoteCreateInput, @Req() req: any) {
-        return await this.noteService.create(body, req.user.id);
+        if (!body.workspace)
+            body.owner = { connect: { id: req.user.id } }
+        return await this.noteService.create(body);
     }
 
     @Put(':id')

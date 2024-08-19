@@ -9,17 +9,8 @@ export class NoteService {
         private prisma: PrismaService
     ) { }
 
-    create(data: Prisma.NoteCreateInput, id: number): Promise<Note> {
-        return this.prisma.note.create({
-            data: {
-                ...data,
-                owner: {
-                    connect: {
-                        id
-                    }
-                }
-            }
-        });
+    create(data: Prisma.NoteCreateInput): Promise<Note> {
+        return this.prisma.note.create({ data });
     }
 
     update(update: Prisma.NoteUpdateInput, id: number): Promise<Note> {

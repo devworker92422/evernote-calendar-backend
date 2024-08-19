@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `user_workspace` ADD COLUMN `createAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3);
