@@ -33,30 +33,33 @@ export class TodoListController {
     async findAll(@Req() req: any) {
         const todolist = await this.todolistService.findAll(req.user.id);
         let result: Array<{ date: string, todolist: TodoList[] }> = [];
-        let activeDate = todolist[0].dueDate;
-        let tmpList: TodoList[] = [];
-        for (let task of todolist) {
-            if (task.dueDate == activeDate) {
-                tmpList.push(task);
-            } else {
-                result.push({
-                    date: activeDate,
-                    todolist: tmpList
-                });
-                tmpList = [];
-                tmpList.push(task);
-                activeDate = task.dueDate;
+        if (todolist.length > 0) {
+            let activeDate = todolist[0].dueDate;
+            let tmpList: TodoList[] = [];
+            for (let task of todolist) {
+                if (task.dueDate == activeDate) {
+                    tmpList.push(task);
+                } else {
+                    result.push({
+                        date: activeDate,
+                        todolist: tmpList
+                    });
+                    tmpList = [];
+                    tmpList.push(task);
+                    activeDate = task.dueDate;
+                }
             }
+            result.push({
+                date: activeDate,
+                todolist: tmpList
+            });
         }
-        result.push({
-            date: activeDate,
-            todolist: tmpList
-        });
         return result;
     }
 
     @Get('day')
     async findAllByDay(@Query('day') day: string, @Req() req: any) {
+
         return await this.todolistService.findAllByDay(day, req.user.id);
     }
 

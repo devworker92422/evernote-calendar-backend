@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Prisma, WorkSpace } from "@prisma/client";
+import { Prisma, WorkSpace, Note, Schedule, TodoList, User } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()
@@ -65,14 +65,19 @@ export class WorkSpaceService {
         })
     }
 
-    invite(workspaceId: number, userId: number): Promise<WorkSpace> {
+    async invite(workspaceId: number, email: string): Promise<WorkSpace> {
+        const user = await this.prisma.user.findFirst({
+            where: {
+                email
+            }
+        })
         return this.prisma.workSpace.update({
             data: {
                 invitedWorkSpace: {
                     create: {
                         user: {
                             connect: {
-                                id: userId
+                                id: user.id
                             }
                         }
                     }
@@ -80,6 +85,42 @@ export class WorkSpaceService {
             },
             where: {
                 id: workspaceId
+            }
+        })
+    }
+
+    findAllNote(workspaceId: number): Promise<Note[]> {
+        return this.prisma.note.findMany({
+            where: {
+                workspaceId
+            }
+        })
+    }
+
+    findAllSchedule(workspaceId: number): Promise<Schedule[]> {
+        return this.prisma.schedule.findMany({
+            where: {
+                workspaceId
+            }
+        })
+    }
+
+    findAllTodoList(workspaceId: number): Promise<TodoList[]> {
+        return this.prisma.todoList.findMany({
+            where: {
+                workspaceId
+            }
+        })
+    }
+
+    findAllMembers(workspaceId: number): Promise<User[]> {
+        return this.prisma.user.findMany({
+            where: {
+                invitedWorkSpace: {
+                    some: {
+                        workspaceId
+                    }
+                }
             }
         })
     }

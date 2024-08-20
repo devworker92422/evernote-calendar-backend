@@ -44,7 +44,28 @@ export class WorkSpaceController {
     }
 
     @Get('invite')
-    async invite(@Query('userId') userId: string, @Query('workspaceId') workspaceId: string) {
-        return await this.workspaceService.invite(parseInt(workspaceId), parseInt(userId));
+    async invite(@Query('email') email: string, @Query('workspaceId') workspaceId: string) {
+        return await this.workspaceService.invite(parseInt(workspaceId), email);
     }
+
+    @Get('note/:id')
+    async findAllNote(@Param('id') id: string) {
+        return await this.workspaceService.findAllNote(parseInt(id));
+    }
+
+    @Get('schedule/:id')
+    async findAllSchedule(@Param('id') id: string) {
+        return await this.workspaceService.findAllSchedule(parseInt(id));
+    }
+
+    @Get('todolist/:id')
+    async findAllTodoList(@Param('id') id: string) {
+        return await this.workspaceService.findAllTodoList(parseInt(id));
+    }
+
+    @Get('member/:id')
+    async findAllMembers(@Param('id') id: string) {
+        return await this.workspaceService.findAllMembers(parseInt(id));
+    }
+
 }
