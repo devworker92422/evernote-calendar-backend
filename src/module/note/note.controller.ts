@@ -43,11 +43,6 @@ export class NoteController {
         return await this.noteService.findAll(req.user.id);
     }
 
-    @Get('/day')
-    async findAllByDay(@Query('day') day: string, @Req() req: any) {
-        return await this.noteService.findAllByDay(day, req.user.id);
-    }
-
     @Delete(':id')
     async remove(@Param('id') id: string) {
         return await this.noteService.remove(parseInt(id));

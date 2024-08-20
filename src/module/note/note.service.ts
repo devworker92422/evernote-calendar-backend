@@ -22,14 +22,11 @@ export class NoteService {
 
     findAll(ownerId): Promise<Note[]> {
         return this.prisma.note.findMany({
-
+            where: {
+                ownerId,
+                workspaceId: null
+            }
         });
-    }
-
-    findAllByDay(date: string, ownerId): Promise<Note[]> {
-        return this.prisma.note.findMany({
-
-        })
     }
 
     remove(id: number): Promise<Note> {

@@ -47,7 +47,8 @@ export class ScheduleService {
                 startDate: {
                     gte: day
                 },
-                ownerId
+                ownerId,
+                workspaceId: null
             },
             orderBy: {
                 startDate: 'asc'

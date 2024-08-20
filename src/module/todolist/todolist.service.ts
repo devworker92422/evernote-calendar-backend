@@ -37,7 +37,8 @@ export class TodoListService {
         return this.prisma.todoList.findMany({
             where: {
                 dueDate: day,
-                ownerId
+                ownerId,
+                workspaceId: null
             },
             orderBy: {
                 startTime: 'asc'

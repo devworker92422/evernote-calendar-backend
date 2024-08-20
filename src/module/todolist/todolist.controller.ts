@@ -61,7 +61,6 @@ export class TodoListController {
 
     @Get('day')
     async findAllByDay(@Query('day') day: string, @Req() req: any) {
-
         return await this.todolistService.findAllByDay(day, req.user.id);
     }
 
