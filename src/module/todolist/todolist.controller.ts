@@ -26,7 +26,9 @@ export class TodoListController {
 
     @Post()
     async create(@Body() body: Prisma.TodoListCreateInput, @Req() req: any) {
-        return await this.todolistService.create(body, req.user.id);
+        if (!body.workspace)
+            body.owner = { connect: { id: req.user.id } };
+        return await this.todolistService.create(body);
     }
 
     @Get()

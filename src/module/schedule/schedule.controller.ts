@@ -25,7 +25,9 @@ export class ScheduleController {
 
     @Post()
     async create(@Body() body: Prisma.ScheduleCreateInput, @Req() req: any) {
-        return await this.scheduleService.create(body, req.user.id);
+        if (!body.workspace)
+            body.owner = { connect: { id: req.user.id } }
+        return await this.scheduleService.create(body);
     }
 
     @Put(':id')

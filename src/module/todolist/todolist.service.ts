@@ -9,14 +9,9 @@ export class TodoListService {
         private prisma: PrismaService
     ) { }
 
-    create(data: Prisma.TodoListCreateInput, id: number): Promise<TodoList> {
+    create(data: Prisma.TodoListCreateInput): Promise<TodoList> {
         return this.prisma.todoList.create({
-            data: {
-                ...data,
-                owner: {
-                    connect: { id }
-                }
-            }
+            data
         });
     }
 

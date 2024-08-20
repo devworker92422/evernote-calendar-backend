@@ -13,6 +13,7 @@ import {
 import { Prisma } from "@prisma/client";
 import { NoteService } from "./note.service";
 import { AuthGuard } from "@nestjs/passport";
+import { NewNoteDTO } from "src/dto";
 
 @Controller('note')
 @UseGuards(AuthGuard('jwt'))
@@ -23,10 +24,13 @@ export class NoteController {
     ) { }
 
     @Post()
-    async create(@Body() body: Prisma.NoteCreateInput, @Req() req: any) {
-        if (!body.workspace)
-            body.owner = { connect: { id: req.user.id } }
-        return await this.noteService.create(body);
+    async create(@Body() body: NewNoteDTO, @Req() req: any) {
+        const data: Prisma.NoteCreateInput = body;
+        data.owner = { connect: { id: req.user.id } };
+        if (body.workspaceId)
+            data.workspace = { connect: { id: body.workspaceId } };
+        delete body.workspaceId;
+        return await this.noteService.create(data);
     }
 
     @Put(':id')

@@ -22,20 +22,13 @@ export class NoteService {
 
     findAll(ownerId): Promise<Note[]> {
         return this.prisma.note.findMany({
-            orderBy: {
-                date: 'asc'
-            }
+
         });
     }
 
     findAllByDay(date: string, ownerId): Promise<Note[]> {
         return this.prisma.note.findMany({
-            where: {
-                date
-            },
-            orderBy: {
-                date: 'asc'
-            }
+
         })
     }
 

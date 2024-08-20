@@ -9,16 +9,9 @@ export class ScheduleService {
         private prisma: PrismaService
     ) { }
 
-    create(data: Prisma.ScheduleCreateInput, userId: number): Promise<Schedule> {
+    create(data: Prisma.ScheduleCreateInput): Promise<Schedule> {
         return this.prisma.schedule.create({
-            data: {
-                ...data,
-                owner: {
-                    connect: {
-                        id: userId
-                    }
-                }
-            },
+            data
         });
     }
 
