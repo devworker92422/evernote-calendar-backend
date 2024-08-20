@@ -14,6 +14,7 @@ import {
 import { AuthGuard } from "@nestjs/passport";
 import { Prisma } from "@prisma/client";
 import { ScheduleService } from "./schedule.service";
+import { NewScheduleDTO } from "src/dto";
 
 @Controller('schedule')
 @UseGuards(AuthGuard('jwt'))
@@ -24,10 +25,13 @@ export class ScheduleController {
     ) { }
 
     @Post()
-    async create(@Body() body: Prisma.ScheduleCreateInput, @Req() req: any) {
-        if (!body.workspace)
-            body.owner = { connect: { id: req.user.id } }
-        return await this.scheduleService.create(body);
+    async create(@Body() body: NewScheduleDTO, @Req() req: any) {
+        const data: Prisma.ScheduleCreateInput = body;
+        data.owner = { connect: { id: req.user.id } };
+        if (body.workspaceId)
+            data.workspace = { connect: { id: body.workspaceId } };
+        delete body.workspaceId;
+        return await this.scheduleService.create(data);
     }
 
     @Put(':id')
