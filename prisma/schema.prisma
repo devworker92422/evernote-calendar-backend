@@ -34,7 +34,6 @@ model Note{
   id Int @default(autoincrement()) @id
   title String @db.Text
   content String @db.LongText
-  date String
   createAt DateTime @default(now())
   updateAt DateTime @default(now()) @updatedAt
   owner User ? @relation(fields: [ownerId], references: [id],onDelete: Cascade,onUpdate: Cascade)
