@@ -43,9 +43,19 @@ export class WorkSpaceController {
         return await this.workspaceService.remove(parseInt(id));
     }
 
-    @Get('invite')
-    async invite(@Query('email') email: string, @Query('workspaceId') workspaceId: string) {
-        return await this.workspaceService.invite(parseInt(workspaceId), email);
+    @Get('user')
+    async findAllUser(@Query('email') email: string) {
+        return await this.workspaceService.findAllUsers(email);
+    }
+
+    @Get('invite/:id')
+    async invite(@Param('id') id: string, @Query('email') email: string) {
+        return await this.workspaceService.invite(parseInt(id), email);
+    }
+
+    @Get('remove-invite/:id')
+    async removeInvite(@Param('id') id: string, @Query('user') userId: string) {
+        return await this.workspaceService.removeInvite(parseInt(id), parseInt(userId));
     }
 
     @Get('note/:id')

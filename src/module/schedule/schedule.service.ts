@@ -51,7 +51,7 @@ export class ScheduleService {
                 workspaceId: null
             },
             orderBy: {
-                startDate: 'asc'
+                startDate: 'desc'
             }
         })
     }

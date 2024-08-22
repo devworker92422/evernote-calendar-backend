@@ -13,6 +13,7 @@ import {
 import { AuthGuard } from "@nestjs/passport";
 import { Prisma, TodoList } from "@prisma/client";
 import { TodoListService } from "./todolist.service";
+import { NewTaskDTO } from "src/dto/todolist.dto";
 
 
 @Controller('task')
@@ -25,10 +26,13 @@ export class TodoListController {
     ) { }
 
     @Post()
-    async create(@Body() body: Prisma.TodoListCreateInput, @Req() req: any) {
-        if (!body.workspace)
-            body.owner = { connect: { id: req.user.id } };
-        return await this.todolistService.create(body);
+    async create(@Body() body: NewTaskDTO, @Req() req: any) {
+        const data: Prisma.TodoListCreateInput = body;
+        data.owner = { connect: { id: req.user.id } };
+        if (body.workspaceId)
+            data.workspace = { connect: { id: body.workspaceId } };
+        delete body.workspaceId;
+        return await this.todolistService.create(data);
     }
 
     @Get()

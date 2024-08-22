@@ -1,6 +1,14 @@
-import { Injectable } from "@nestjs/common";
-import { Prisma, WorkSpace, Note, Schedule, TodoList, User } from "@prisma/client";
+import { Injectable, BadRequestException } from "@nestjs/common";
+import {
+    Prisma,
+    WorkSpace,
+    Note,
+    Schedule,
+    TodoList,
+    User
+} from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
+import { UserDTO } from "src/dto";
 
 @Injectable()
 
@@ -65,26 +73,89 @@ export class WorkSpaceService {
         })
     }
 
-    async invite(workspaceId: number, email: string): Promise<WorkSpace> {
+    async invite(workspaceId: number, email: string): Promise<UserDTO> {
         const user = await this.prisma.user.findFirst({
             where: {
                 email
             }
-        })
-        return this.prisma.workSpace.update({
+        });
+        if (!user)
+            throw new BadRequestException("no-user");
+        const invite = await this.prisma.user.findFirst({
+            where: {
+                email,
+                invitedWorkSpace: {
+                    some: {
+                        workspaceId
+                    }
+                }
+            }
+        });
+        if (invite)
+            throw new BadRequestException("already-invited");
+        const workspace = await this.prisma.workSpace.findFirst({
+            where: { id: workspaceId }
+        });
+        if (!workspace)
+            throw new BadRequestException("no-workspace");
+        return this.prisma.user.update({
             data: {
                 invitedWorkSpace: {
                     create: {
-                        user: {
+                        workspace: {
                             connect: {
-                                id: user.id
+                                id: workspaceId
                             }
                         }
                     }
                 }
             },
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true
+            },
+            where: {
+                id: user.id
+            }
+        })
+    }
+
+    async removeInvite(workspaceId: number, userId: number): Promise<UserDTO> {
+        return this.prisma.user.update({
+            data: {
+                invitedWorkSpace: {
+                    delete: {
+                        userId_workspaceId: {
+                            userId,
+                            workspaceId
+                        }
+                    }
+                }
+            },
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true
+            },
             where: {
                 id: workspaceId
+            }
+        })
+    }
+
+    findAllUsers(email: string): Promise<UserDTO[]> {
+        return this.prisma.user.findMany({
+            where: {
+                email: { contains: email }
+            },
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
             }
         })
     }
@@ -93,6 +164,9 @@ export class WorkSpaceService {
         return this.prisma.note.findMany({
             where: {
                 workspaceId
+            },
+            orderBy: {
+                createAt: 'desc'
             }
         })
     }
@@ -101,6 +175,9 @@ export class WorkSpaceService {
         return this.prisma.schedule.findMany({
             where: {
                 workspaceId
+            },
+            orderBy: {
+                createAt: 'desc'
             }
         })
     }
@@ -109,6 +186,9 @@ export class WorkSpaceService {
         return this.prisma.todoList.findMany({
             where: {
                 workspaceId
+            },
+            orderBy: {
+                dueDate: 'desc'
             }
         })
     }
