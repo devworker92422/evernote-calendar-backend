@@ -6,7 +6,6 @@ import {
     Delete,
     Param,
     Body,
-    Query,
     UseGuards,
     Req
 } from "@nestjs/common";
@@ -46,6 +45,11 @@ export class NoteController {
     @Delete(':id')
     async remove(@Param('id') id: string) {
         return await this.noteService.remove(parseInt(id));
+    }
+
+    @Get('/workspace')
+    async findAllNotesOnWorkSpaces(@Req() req: any) {
+        return await this.noteService.findAllOnWorkSpaces(req.user.id);
     }
 
 }

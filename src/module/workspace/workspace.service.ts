@@ -17,11 +17,26 @@ export class WorkSpaceService {
         private prisma: PrismaService
     ) { }
 
-    create(data: Prisma.WorkSpaceCreateInput): Promise<WorkSpace> {
-        return this.prisma.workSpace.create({
+    async create(data: Prisma.WorkSpaceCreateInput, userId: number): Promise<WorkSpace> {
+        const workspace = await this.prisma.workSpace.create({
             data
-        })
-
+        });
+        return this.prisma.workSpace.update({
+            data: {
+                invitedWorkSpace: {
+                    create: {
+                        user: {
+                            connect: {
+                                id: userId
+                            }
+                        }
+                    }
+                }
+            },
+            where: {
+                id: workspace.id
+            }
+        });
     }
 
     update(data: Prisma.WorkSpaceUpdateInput, id: number): Promise<WorkSpace> {
@@ -50,7 +65,7 @@ export class WorkSpaceService {
                     },
                     {
                         invitedWorkSpace: {
-                            every: {
+                            some: {
                                 userId: ownerId
                             }
                         }
@@ -124,7 +139,7 @@ export class WorkSpaceService {
         })
     }
 
-    async removeInvite(workspaceId: number, userId: number): Promise<UserDTO> {
+    removeInvite(workspaceId: number, userId: number): Promise<UserDTO> {
         return this.prisma.user.update({
             data: {
                 invitedWorkSpace: {
