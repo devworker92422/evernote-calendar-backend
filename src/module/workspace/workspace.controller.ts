@@ -13,6 +13,7 @@ import {
 import { AuthGuard } from "@nestjs/passport";
 import { Prisma } from "@prisma/client";
 import { WorkSpaceService } from "./workspace.service";
+import { WorkSpaceTodoListDTO } from "src/dto/workspace.dto";
 
 @Controller('workspace')
 @UseGuards(AuthGuard('jwt'))
@@ -49,8 +50,12 @@ export class WorkSpaceController {
     }
 
     @Get('invite/:id')
-    async invite(@Param('id') id: string, @Query('email') email: string) {
-        return await this.workspaceService.invite(parseInt(id), email);
+    async invite(
+        @Param('id') id: string,
+        @Query('email') email: string,
+        @Req() req: any
+    ) {
+        return await this.workspaceService.invite(parseInt(id), email, req.user.id);
     }
 
     @Get('remove-invite/:id')
@@ -70,7 +75,30 @@ export class WorkSpaceController {
 
     @Get('todolist/:id')
     async findAllTodoList(@Param('id') id: string) {
-        return await this.workspaceService.findAllTodoList(parseInt(id));
+        const todolist = await this.workspaceService.findAllTodoList(parseInt(id));
+        const result: Array<WorkSpaceTodoListDTO> = [];
+        let tmpTodolist = [];
+        if (todolist.length > 0) {
+            let tmpDueDate = todolist[0].dueDate;
+            todolist.map((task, i) => {
+                if (task.dueDate == tmpDueDate) {
+                    tmpTodolist.push(task);
+                } else {
+                    result.push({
+                        dueDate: tmpDueDate,
+                        todolist: tmpTodolist
+                    });
+                    tmpDueDate = task.dueDate;
+                    tmpTodolist = [];
+                    tmpTodolist.push(task);
+                }
+            });
+            result.push({
+                dueDate: tmpDueDate,
+                todolist: tmpTodolist
+            });
+        }
+        return result;
     }
 
     @Get('member/:id')

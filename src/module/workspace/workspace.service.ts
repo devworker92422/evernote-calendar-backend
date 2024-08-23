@@ -73,12 +73,14 @@ export class WorkSpaceService {
         })
     }
 
-    async invite(workspaceId: number, email: string): Promise<UserDTO> {
+    async invite(workspaceId: number, email: string, userId: number): Promise<UserDTO> {
         const user = await this.prisma.user.findFirst({
             where: {
                 email
             }
         });
+        if (user.id == userId)
+            throw new BadRequestException("owner");
         if (!user)
             throw new BadRequestException("no-user");
         const invite = await this.prisma.user.findFirst({
@@ -187,9 +189,10 @@ export class WorkSpaceService {
             where: {
                 workspaceId
             },
-            orderBy: {
-                dueDate: 'desc'
-            }
+            orderBy: [
+                { dueDate: 'desc' },
+                { startTime: 'asc' }
+            ]
         })
     }
 
@@ -199,7 +202,7 @@ export class WorkSpaceService {
                 invitedWorkSpace: {
                     some: {
                         workspaceId
-                    }
+                    },
                 }
             }
         })
