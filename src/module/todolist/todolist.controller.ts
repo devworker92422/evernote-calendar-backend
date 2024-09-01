@@ -77,4 +77,12 @@ export class TodoListController {
     async remove(@Param('id') id: string) {
         return await this.todolistService.remove(parseInt(id));
     }
+
+    @Get('workspace')
+    async findAllTodoListOnWorkSpaces(
+        @Req() req: any,
+        @Query('dueDate') dueDate: string
+    ) {
+        return await this.todolistService.findAllTodoListOnWorkSpaces(req.user.id, dueDate);
+    }
 }

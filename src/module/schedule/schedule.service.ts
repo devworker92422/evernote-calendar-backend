@@ -1,6 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { Prisma, Schedule } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
+import { SchedulesOnWorkSpaces } from "src/dto";
+import { title } from "process";
 
 @Injectable()
 
@@ -55,4 +57,29 @@ export class ScheduleService {
             }
         })
     }
+
+    findAllScheduleOnWorkSpaces(userId: number, dueDate: string): Promise<Array<SchedulesOnWorkSpaces>> {
+        return this.prisma.workSpace.findMany({
+            where: {
+                invitedWorkSpace: {
+                    some: {
+                        userId
+                    }
+                },
+                schedules: {
+                    some: {
+                        startDate: {
+                            gte: dueDate
+                        }
+                    }
+                }
+            },
+            select: {
+                id: true,
+                title: true,
+                schedules: true
+            }
+        })
+    }
+
 }

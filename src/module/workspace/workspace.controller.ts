@@ -75,30 +75,7 @@ export class WorkSpaceController {
 
     @Get('todolist/:id')
     async findAllTodoList(@Param('id') id: string) {
-        const todolist = await this.workspaceService.findAllTodoList(parseInt(id));
-        const result: Array<WorkSpaceTodoListDTO> = [];
-        let tmpTodolist = [];
-        if (todolist.length > 0) {
-            let tmpDueDate = todolist[0].dueDate;
-            todolist.map((task, i) => {
-                if (task.dueDate == tmpDueDate) {
-                    tmpTodolist.push(task);
-                } else {
-                    result.push({
-                        dueDate: tmpDueDate,
-                        todolist: tmpTodolist
-                    });
-                    tmpDueDate = task.dueDate;
-                    tmpTodolist = [];
-                    tmpTodolist.push(task);
-                }
-            });
-            result.push({
-                dueDate: tmpDueDate,
-                todolist: tmpTodolist
-            });
-        }
-        return result;
+        return await this.workspaceService.findAllTodoList(parseInt(id));;
     }
 
     @Get('member/:id')

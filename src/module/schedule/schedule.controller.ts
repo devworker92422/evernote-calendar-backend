@@ -36,10 +36,7 @@ export class ScheduleController {
 
     @Put(':id')
     async update(@Body() body: Prisma.ScheduleUpdateInput, @Param('id') id: string) {
-        return {
-            statusCode: HttpStatus.OK,
-            data: await this.scheduleService.update(parseInt(id), body)
-        }
+        return await this.scheduleService.update(parseInt(id), body);
     }
 
     @Get('day')
@@ -54,9 +51,14 @@ export class ScheduleController {
 
     @Delete(':id')
     async remove(@Param('id') id: string) {
-        return {
-            statusCode: HttpStatus.OK,
-            data: await this.scheduleService.remove(parseInt(id))
-        }
+        return await this.scheduleService.remove(parseInt(id));
+    }
+
+    @Get('workspace')
+    async findAllScheduleOnWorkSpaces(
+        @Query('dueDate') dueDate: string,
+        @Req() req: any
+    ) {
+        return await this.scheduleService.findAllScheduleOnWorkSpaces(req.user.id, dueDate);
     }
 }
