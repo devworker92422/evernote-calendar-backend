@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { Prisma, Schedule } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import { SchedulesOnWorkSpaces } from "src/dto";
-import { title } from "process";
 
 @Injectable()
 
@@ -47,13 +46,16 @@ export class ScheduleService {
         return this.prisma.schedule.findMany({
             where: {
                 startDate: {
+                    lte: day
+                },
+                endDate: {
                     gte: day
                 },
                 ownerId,
                 workspaceId: null
             },
             orderBy: {
-                startDate: 'desc'
+                startDate: 'asc'
             }
         })
     }
@@ -69,6 +71,9 @@ export class ScheduleService {
                 schedules: {
                     some: {
                         startDate: {
+                            lte: dueDate
+                        },
+                        endDate: {
                             gte: dueDate
                         }
                     }
@@ -78,8 +83,43 @@ export class ScheduleService {
                 id: true,
                 title: true,
                 schedules: true
-            }
+            },
         })
     }
 
-}
+    findAllScheduleByMonth(ownerId: number, date: string) {
+        return this.prisma.schedule.findMany({
+            where: {
+                OR: [
+                    {
+                        workspace: {
+                            schedules: {
+                                some: {
+                                    startDate: {
+                                        lte: date
+                                    },
+                                    endDate: {
+                                        gte: date
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        ownerId,
+                        startDate: {
+                            lte: date
+                        },
+                        endDate: {
+                            gte: date
+                        }
+                    }
+                ]
+            },
+            orderBy: {
+                startDate: 'asc'
+            }
+        });
+    }
+
+}   

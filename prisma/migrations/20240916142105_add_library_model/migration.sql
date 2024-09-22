@@ -1,0 +1,14 @@
+-- CreateTable
+CREATE TABLE `Library` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `type` ENUM('DOC', 'MEDIA') NOT NULL,
+    `fileName` VARCHAR(191) NOT NULL,
+    `ownerId` INTEGER NOT NULL,
+    `createAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updateAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `Library` ADD CONSTRAINT `Library_ownerId_fkey` FOREIGN KEY (`ownerId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

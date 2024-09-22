@@ -12,7 +12,8 @@ import {
     Req
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { Prisma } from "@prisma/client";
+import * as moment from 'moment';
+import { Prisma, Schedule } from "@prisma/client";
 import { ScheduleService } from "./schedule.service";
 import { NewScheduleDTO } from "src/dto";
 
@@ -60,5 +61,25 @@ export class ScheduleController {
         @Req() req: any
     ) {
         return await this.scheduleService.findAllScheduleOnWorkSpaces(req.user.id, dueDate);
+    }
+
+    @Get('month')
+    async findAllScheduleByMonth(
+        @Query('month') month: string,
+        @Query('year') year: string,
+        @Req() req: any
+    ) {
+        const startDay = moment().year(parseInt(year)).month(parseInt(month) - 1).startOf('M').startOf('W');
+        const endDay = moment().year(parseInt(year)).month(parseInt(month) - 1).endOf('M').endOf('W');
+        const daysOfMonth = endDay.diff(startDay, 'day') + 1;
+        const result: Array<Array<Schedule>> = [];
+        for (let i = 0; i < daysOfMonth; i++) {
+            result.push(await this.scheduleService.findAllScheduleByMonth(
+                req.user.id,
+                moment(startDay).add(i, 'day').format('YYYY-MM-DD')
+            ));
+        }
+
+        return result;
     }
 }

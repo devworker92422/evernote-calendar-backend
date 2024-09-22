@@ -28,6 +28,7 @@ model User {
   todolists TodoList[]
   myWorkspaces WorkSpace[]
   invitedWorkSpace User_WorkSpace[]
+  libraries Library[]
 }
 
 model Note{
@@ -102,3 +103,21 @@ enum Role {
   USER
   ADMIN
 }
+
+enum LibraryFileType {
+  DOC
+  MEDIA
+}
+
+model Library {
+  id Int @default(autoincrement()) @id
+  type LibraryFileType
+  originName String
+  fileName String
+  mimeType String
+  owner User @relation(fields: [ownerId],references: [id])
+  ownerId Int
+  createAt DateTime @default(now())
+  updateAt DateTime @default(now()) @updatedAt 
+}
+

@@ -1,3 +1,5 @@
+import { Schedule } from "@prisma/client";
+
 export interface NewScheduleDTO {
     title: string;
     description: string;
